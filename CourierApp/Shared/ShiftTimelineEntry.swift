@@ -3,6 +3,7 @@ import Foundation
 // MARK: - Timeline Order Status
 
 enum TimelineOrderStatus: Codable, Equatable {
+    case pending
     case delivered(minutes: Int)
     case cancelled
 }
@@ -16,14 +17,16 @@ struct TimelineOrder: Codable, Identifiable, Equatable {
     let amount: String
     var status: TimelineOrderStatus
     var distance: Double?
+    var deliveryMinutes: Int?
 
-    init(id: UUID = UUID(), number: String, address: String, amount: String, status: TimelineOrderStatus, distance: Double? = nil) {
+    init(id: UUID = UUID(), number: String, address: String, amount: String, status: TimelineOrderStatus, distance: Double? = nil, deliveryMinutes: Int? = nil) {
         self.id = id
         self.number = number
         self.address = address
         self.amount = amount
         self.status = status
         self.distance = distance
+        self.deliveryMinutes = deliveryMinutes
     }
 }
 

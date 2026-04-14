@@ -29,6 +29,7 @@ struct OrdersView: View {
     @State private var isTransitioning = false
     @State private var showCopiedToast = false
     @State private var showBlurredToast = false
+    @State private var currentRouteID: UUID?
 
     var body: some View {
         ZStack {
@@ -166,6 +167,12 @@ struct OrdersView: View {
         return sign * m
     }
 
+    private static func parseDeliveryTimeMinutes(_ time: String) -> Int {
+        let parts = time.split(separator: ":")
+        guard parts.count == 2, let m = Int(parts[0]) else { return 0 }
+        return m
+    }
+
     private static func parseDistanceKm(_ distance: String) -> Double {
         if distance.hasSuffix(" km") {
             let num = distance.replacingOccurrences(of: " km", with: "")
@@ -198,16 +205,28 @@ struct OrdersView: View {
 
             if case .picking = next {
                 onNewOrders?()
+                let routeID = UUID()
+                currentRouteID = routeID
                 let timelineOrders = orders.map { order in
                     TimelineOrder(
                         number: order.number,
                         address: order.address.street,
                         amount: order.amount,
-                        status: .delivered(minutes: Self.parseTimeDeltaMinutes(order.deliveryResult.timeDelta)),
+                        status: .pending,
                         distance: Self.parseDistanceKm(order.deliveryResult.distance)
                     )
                 }
-                historyStore.addEntry(.route(id: UUID(), time: Date(), orders: timelineOrders))
+                historyStore.addEntry(.route(id: routeID, time: Date(), orders: timelineOrders))
+            }
+
+            if case .success(let i) = next, let routeID = currentRouteID {
+                let order = orders[i]
+                historyStore.updateOrderStatus(
+                    routeID: routeID,
+                    orderIndex: i,
+                    status: .delivered(minutes: Self.parseTimeDeltaMinutes(order.deliveryResult.timeDelta)),
+                    deliveryMinutes: Self.parseDeliveryTimeMinutes(order.deliveryResult.deliveryTime)
+                )
             }
 
             try? await Task.sleep(for: .milliseconds(50))

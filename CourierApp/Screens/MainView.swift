@@ -52,6 +52,7 @@ private struct ShiftTabHorizontalClip: ViewModifier {
 
 struct MainView: View {
     @Binding var isShiftOpen: Bool
+    @Environment(OrderHistoryStore.self) private var historyStore
     @State private var selectedTab: Tab = .shifts
     @State private var suppressMainTabBar = false
     @State private var pauseState: PauseState = .off
@@ -60,6 +61,10 @@ struct MainView: View {
     @State private var showNewOrderToast = false
     @State private var ordersAreActive = false
     @State private var showShiftClosedToast = false
+    @State private var shiftsScrollToTop = false
+    /// День, для которого показываем шторку сброса истории (синхронизируется с календарём «Смен»).
+    @State private var shakeHistoryTargetDate = Calendar.current.startOfDay(for: Date())
+    @State private var showDeleteHistorySheet = false
     private let haptic = UISelectionFeedbackGenerator()
 
     private var visibleTabs: [Tab] {
@@ -83,7 +88,14 @@ struct MainView: View {
                     .clipped()
                     .opacity(selectedTab == .orders ? 1 : 0)
                 }
-                ShiftsView(isShiftOpen: $isShiftOpen, pauseState: $pauseState, ordersAreActive: ordersAreActive, onPauseConfirmed: handlePauseConfirmed)
+                ShiftsView(
+                    isShiftOpen: $isShiftOpen,
+                    pauseState: $pauseState,
+                    ordersAreActive: ordersAreActive,
+                    onPauseConfirmed: handlePauseConfirmed,
+                    scrollToTop: shiftsScrollToTop,
+                    shakeHistoryTargetDate: $shakeHistoryTargetDate
+                )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .modifier(ShiftTabHorizontalClip(enabled: isShiftOpen))
                     .opacity(selectedTab == .shifts ? 1 : 0)
@@ -110,6 +122,17 @@ struct MainView: View {
         }
         .toast("Новый заказ!", isPresented: $showNewOrderToast)
         .toast("Смена закрыта\n— можно отдыхать", isPresented: $showShiftClosedToast)
+        .sheet(isPresented: $showDeleteHistorySheet) {
+            DeleteHistorySheetView(
+                isPresented: $showDeleteHistorySheet,
+                selectedDate: shakeHistoryTargetDate
+            ) {
+                historyStore.deleteHistory(for: shakeHistoryTargetDate)
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .deviceDidShake)) { _ in
+            showDeleteHistorySheet = true
+        }
         .onChange(of: selectedTab) { _, _ in
             haptic.selectionChanged()
         }
@@ -148,7 +171,12 @@ struct MainView: View {
     }
 
     private func handleTabTap(_ newTab: Tab) {
-        guard newTab != selectedTab else { return }
+        if newTab == selectedTab {
+            if newTab == .shifts {
+                shiftsScrollToTop.toggle()
+            }
+            return
+        }
         haptic.selectionChanged()
         var t = Transaction(animation: nil)
         t.disablesAnimations = true
@@ -182,4 +210,5 @@ struct MainView: View {
 
 #Preview {
     MainView(isShiftOpen: .constant(false))
+        .environment(OrderHistoryStore())
 }

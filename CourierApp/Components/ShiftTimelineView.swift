@@ -101,32 +101,93 @@ private struct TimelineOrderCard: View {
     let order: TimelineOrder
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(order.address)
-                .textStyle()
-                .foregroundStyle(Color.text1)
-
-            HStack(spacing: 4) {
-                Text(order.number)
+        HStack(alignment: .top, spacing: 8) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(order.address)
                     .textStyle()
-                    .foregroundStyle(Color.text2)
-                    .opacity(0.4)
+                    .foregroundStyle(Color.text1)
 
-                Circle()
-                    .fill(Color.text2)
-                    .frame(width: 3, height: 3)
-                    .opacity(0.4)
+                HStack(spacing: 4) {
+                    Text(order.number)
+                        .textStyle()
+                        .foregroundStyle(Color.text2)
+                        .opacity(0.4)
 
-                Text(order.amount)
-                    .textStyle()
-                    .foregroundStyle(Color.text2)
-                    .opacity(0.4)
+                    Circle()
+                        .fill(Color.text2)
+                        .frame(width: 3, height: 3)
+                        .opacity(0.4)
+
+                    Text(order.amount)
+                        .textStyle()
+                        .foregroundStyle(Color.text2)
+                        .opacity(0.4)
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            OrderStatusLabel(status: order.status, deliveryMinutes: order.deliveryMinutes)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
         .background(Color.surface3)
         .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+// MARK: - Order Status Label
+
+private struct OrderStatusLabel: View {
+    let status: TimelineOrderStatus
+    let deliveryMinutes: Int?
+
+    private var text: String? {
+        switch status {
+        case .pending:
+            return nil
+        case .delivered:
+            guard let minutes = deliveryMinutes else { return nil }
+            return "\(minutes) мин"
+        case .cancelled:
+            return "Отменён"
+        }
+    }
+
+    private var foregroundColor: Color {
+        switch status {
+        case .delivered(let minutes):
+            return minutes > 0 ? .success : .danger
+        case .cancelled:
+            return .text2
+        case .pending:
+            return .clear
+        }
+    }
+
+    private var backgroundColor: Color {
+        switch status {
+        case .delivered(let minutes):
+            return minutes > 0 ? .successSurface : .dangerSurface
+        case .cancelled:
+            return .fill3
+        case .pending:
+            return .clear
+        }
+    }
+
+    var body: some View {
+        if let text {
+            Text(text)
+                .captionStyle()
+                .foregroundStyle(foregroundColor)
+                .padding(.horizontal, 6)
+                .frame(height: 24)
+                .background(backgroundColor)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .strokeBorder(Color.stroke1, lineWidth: 1)
+                )
+        }
     }
 }
 

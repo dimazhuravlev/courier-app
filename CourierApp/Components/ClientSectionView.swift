@@ -89,8 +89,9 @@ struct ClientSectionView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .padding(.top, 6)
 
-                CommentTipShape()
-                    .fill(Color.surface2)
+                Image("comment tip")
+                    .renderingMode(.template)
+                    .foregroundStyle(Color.surface2)
                     .frame(width: 20, height: 14)
             }
         }
@@ -100,18 +101,6 @@ struct ClientSectionView: View {
     }
 }
 
-// MARK: - Comment Tip Shape
-
-private struct CommentTipShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        path.closeSubpath()
-        return path
-    }
-}
 
 // MARK: - Preview
 

@@ -58,14 +58,12 @@ struct PickingView: View {
             }
             .padding(.top, 72)
 
-            // Slider button at the bottom (only when all orders are ready)
-            if !hasPreparing {
-                VStack(spacing: 0) {
-                    Spacer()
-                    SliderButton(label: "Я забрал все заказы", onConfirm: onPickedUp)
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 100)
-                }
+            // Slider button at the bottom
+            VStack(spacing: 0) {
+                Spacer()
+                SliderButton(label: "Я забрал все заказы", onConfirm: onPickedUp)
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 100)
             }
         }
         .onAppear { setupPreparingState() }

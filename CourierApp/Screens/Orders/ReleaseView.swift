@@ -33,7 +33,7 @@ struct ReleaseView: View {
             // Slider button at the bottom
             VStack(spacing: 0) {
                 Spacer()
-                SliderButton(label: "Я получил оплату и передал заказ", onConfirm: onDelivered)
+                SliderButton(label: order.isPaid ? "Я передал заказ" : "Я получил оплату и передал заказ", onConfirm: onDelivered)
                     .padding(.horizontal, 24)
                     .padding(.bottom, 100)
             }

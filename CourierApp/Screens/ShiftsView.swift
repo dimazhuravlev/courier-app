@@ -72,6 +72,8 @@ struct ShiftsView: View {
     @Binding var pauseState: PauseState
     var ordersAreActive: Bool = false
     var onPauseConfirmed: () -> Void
+    var scrollToTop: Bool = false
+    @Binding var shakeHistoryTargetDate: Date
     @Environment(OrderHistoryStore.self) private var historyStore
     @State private var weekDelta: Int = 0
     @State private var dragOffset: CGFloat = 0
@@ -82,7 +84,6 @@ struct ShiftsView: View {
     @State private var showCalendarSheet = false
     @State private var showPauseWarningSheet = false
     @State private var showBlockedCloseToast = false
-    @State private var showDeleteHistorySheet = false
 
     private let selectionHaptic = UISelectionFeedbackGenerator()
     private let impactHaptic = UIImpactFeedbackGenerator(style: .light)
@@ -164,22 +165,30 @@ struct ShiftsView: View {
             ZStack(alignment: .topLeading) {
                 bg.ignoresSafeArea()
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Color.clear
-                            .frame(height: headerTopPadding + headerReservedHeight)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Color.clear
+                                .frame(height: headerTopPadding + headerReservedHeight)
+                                .id("shiftsTop")
 
-                        weekdayNamesRow
-                            .padding(.top, 10)
+                            weekdayNamesRow
+                                .padding(.top, 10)
 
-                        weekStripView
-                            .padding(.top, 4)
+                            weekStripView
+                                .padding(.top, 4)
 
-                        contentArea
+                            contentArea
+                        }
+                        .padding(.bottom, 196 + bottomInset)
                     }
-                    .padding(.bottom, 196 + bottomInset)
+                    .scrollIndicators(.hidden)
+                    .onChange(of: scrollToTop) { _, _ in
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            proxy.scrollTo("shiftsTop", anchor: .top)
+                        }
+                    }
                 }
-                .scrollIndicators(.hidden)
 
                 topHeaderGradient(topInset: topInset)
                 headerView
@@ -205,6 +214,7 @@ struct ShiftsView: View {
             selectionHaptic.prepare()
             impactHaptic.prepare()
             syncShiftStateFromBinding()
+            shakeHistoryTargetDate = selectedDate
         }
         .onChange(of: isShiftOpen) { _, open in
             syncShiftStateFromBinding()
@@ -237,18 +247,6 @@ struct ShiftsView: View {
                 onPauseConfirmed()
             }
         }
-        .sheet(isPresented: $showDeleteHistorySheet) {
-            DeleteHistorySheetView(
-                isPresented: $showDeleteHistorySheet,
-                selectedDate: selectedDate
-            ) {
-                historyStore.deleteHistory(for: selectedDate)
-            }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .deviceDidShake)) { _ in
-            guard historyStore.hasHistory(for: selectedDate) else { return }
-            showDeleteHistorySheet = true
-        }
         .onChange(of: pauseState) { _, new in
             switch new {
             case .active:
@@ -270,7 +268,8 @@ struct ShiftsView: View {
                 break
             }
         }
-        .onChange(of: selectedDate) { _, _ in
+        .onChange(of: selectedDate) { _, new in
+            shakeHistoryTargetDate = new
             applyWeekDeltaForCurrentSelection()
         }
         .onChange(of: showCalendarSheet) { _, isOpen in
@@ -469,7 +468,7 @@ struct ShiftsView: View {
     /// Отступ таймлайна под блоком саммари или виджета открытой смены (только «сегодня»).
     private var todayTimelineTopPadding: CGFloat {
         guard !timelineEntries.isEmpty else { return 0 }
-        return (hasSummaryData || isShiftActive) ? 40 : 0
+        return 40
     }
 
     @ViewBuilder
@@ -492,24 +491,15 @@ struct ShiftsView: View {
         }
     }
 
-    /// Саммари и виджет открытой смены в одном слоте — кроссфейд без смены веток `if`, чтобы не было промаргивания.
     @ViewBuilder
     private var todayShiftWidgetsSlot: some View {
-        ZStack(alignment: .top) {
-            if hasSummaryData {
-                ShiftSummaryWidget(summary: ShiftDaySummary(entries: timelineEntries))
-                    .opacity(isShiftActive ? 0 : 1)
-                    .allowsHitTesting(!isShiftActive)
-                    .accessibilityHidden(isShiftActive)
-                    .compositingGroup()
-            }
+        if isShiftActive {
             openShiftWidget
-                .opacity(isShiftActive ? 1 : 0)
-                .allowsHitTesting(isShiftActive)
-                .accessibilityHidden(!isShiftActive)
-                .compositingGroup()
+                .transition(.opacity)
+        } else if hasSummaryData {
+            ShiftSummaryWidget(summary: ShiftDaySummary(entries: timelineEntries))
+                .transition(.opacity)
         }
-        .animation(.easeInOut(duration: 0.2), value: isShiftActive)
     }
 
     @ViewBuilder
@@ -652,12 +642,9 @@ struct ShiftsView: View {
     }
 
     private var sliderButtonBar: some View {
-        VStack(spacing: 0) {
-            Spacer()
-                .allowsHitTesting(false)
-            startShiftButton
-                .padding(.bottom, 100)
-        }
+        startShiftButton
+            .padding(.bottom, 100)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
 
     // MARK: - Today Floating Button

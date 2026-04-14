@@ -59,6 +59,18 @@ final class OrderHistoryStore {
         datesWithHistory.contains(dateKey(for: date))
     }
 
+    func updateOrderStatus(routeID: UUID, orderIndex: Int, status: TimelineOrderStatus, deliveryMinutes: Int?) {
+        guard let routeIdx = todayEntries.firstIndex(where: { $0.id == routeID }),
+              case .route(let id, let time, var orders) = todayEntries[routeIdx],
+              orderIndex < orders.count else { return }
+        orders[orderIndex].status = status
+        if let dm = deliveryMinutes {
+            orders[orderIndex].deliveryMinutes = dm
+        }
+        todayEntries[routeIdx] = .route(id: id, time: time, orders: orders)
+        saveEntries(todayEntries, for: Date())
+    }
+
     func deleteHistory(for date: Date) {
         let key = dateKey(for: date)
         let url = fileURL(for: date)
