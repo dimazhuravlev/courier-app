@@ -1,0 +1,40 @@
+---
+description: Automatically register new Swift files in the Xcode project file
+alwaysApply: true
+---
+
+# Регистрация файлов в Xcode проекте
+
+При создании **любого нового `.swift` файла** немедленно добавь его в `CourierApp.xcodeproj/project.pbxproj`. Не жди ошибки компиляции.
+
+## Три обязательных изменения в project.pbxproj
+
+### 1. PBXBuildFile (Build Files секция)
+```
+B4XXXXXXXXXXXXXXXXXXXX /* MyFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4YYYYYYYYYYYYYYYYYY /* MyFile.swift */; };
+```
+
+### 2. PBXFileReference (File References секция)
+```
+B4YYYYYYYYYYYYYYYYYY /* MyFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFile.swift; sourceTree = "<group>"; };
+```
+
+### 3. PBXGroup — добавь в нужную группу (Components, Screens, Shared и т.д.)
+```
+B4YYYYYYYYYYYYYYYYYY /* MyFile.swift */,
+```
+
+### 4. PBXSourcesBuildPhase — добавь в секцию Sources
+```
+B4XXXXXXXXXXXXXXXXXXXX /* MyFile.swift in Sources */,
+```
+
+## Паттерн ID
+
+Смотри на уже существующие ID в файле и продолжай паттерн. Например, если последний используемый ID — `B300000000000000000004AA`, следующий будет `B400000000000000000001AA`.
+
+## ❌ Неправильно
+Создать `.swift` файл и не добавить его в `.xcodeproj` → ошибка `Cannot find 'MyView' in scope`
+
+## ✅ Правильно
+Создать `.swift` файл + сразу добавить все 4 записи в `project.pbxproj` в одном шаге

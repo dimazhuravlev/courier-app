@@ -1,0 +1,34 @@
+---
+description: Правила использования типографики в проекте
+globs: **/*.swift
+alwaysApply: false
+---
+
+# Типографика
+
+При вёрстке любого текста всегда используй переменные стилей из `Typography.swift`.
+
+## Доступные стили
+
+| Переменная | Шрифт | Размер | Line Height |
+|---|---|---|---|
+| `.headline1Style()` | Pretendard SemiBold | 20 | 22 |
+| `.headline2Style()` | Pretendard SemiBold | 18 | 20 |
+| `.textStyle()` | Pretendard SemiBold | 14 | 16 |
+
+## Использование
+
+```swift
+// ✅ ПРАВИЛЬНО
+Text("Заголовок").headline1Style()
+Text("Подзаголовок").headline2Style()
+Text("Обычный текст").textStyle()
+
+// ❌ НЕПРАВИЛЬНО — хардкод шрифта
+Text("Заголовок").font(.custom("Pretendard-SemiBold", size: 20))
+Text("Текст").font(.system(size: 14))
+```
+
+## Если подходящего стиля нет
+
+Не придумывай новые значения самостоятельно. Сообщи пользователю, что нужного стиля нет, и предложи добавить его в `Typography.swift`.
