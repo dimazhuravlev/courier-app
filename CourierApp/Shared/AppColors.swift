@@ -2,7 +2,7 @@ import SwiftUI
 
 extension Color {
 
-    // Surface
+    // Поверхности
 
     /// #0F1215
     static let surface0 = Color(red: 15 / 255, green: 18 / 255, blue: 21 / 255)
@@ -13,7 +13,7 @@ extension Color {
     /// rgba(155, 165, 176, 0.1)
     static let surface3 = Color(red: 155 / 255, green: 165 / 255, blue: 176 / 255, opacity: 0.1)
 
-    // Fill
+    // Заливки
 
     /// #FFFFFF0A
     static let fill1 = Color(red: 1, green: 1, blue: 1, opacity: 10 / 255)
@@ -32,7 +32,7 @@ extension Color {
     /// #0000001F
     static let overlayHover = Color(red: 0, green: 0, blue: 0, opacity: 31 / 255)
 
-    // Text
+    // Текст
 
     /// #FFFFFF
     static let text1 = Color.white
@@ -43,7 +43,7 @@ extension Color {
     /// #0F1215
     static let textInverted = Color(red: 15 / 255, green: 18 / 255, blue: 21 / 255)
 
-    // Stroke
+    // Обводка
 
     /// rgba(255, 255, 255, 0.04)
     static let stroke1 = Color(red: 1, green: 1, blue: 1, opacity: 0.04)
@@ -52,7 +52,7 @@ extension Color {
     /// rgba(255, 255, 255, 0.10)
     static let stroke3 = Color(red: 1, green: 1, blue: 1, opacity: 0.1)
 
-    // Accent
+    // Акцент
 
     /// #03AB00
     static let success = Color(red: 3 / 255, green: 171 / 255, blue: 0 / 255)

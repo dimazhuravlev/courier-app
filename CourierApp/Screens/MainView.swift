@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Tab
+// MARK: - Вкладка
 
 enum Tab: Int, CaseIterable {
     case orders = 0
@@ -25,7 +25,7 @@ enum Tab: Int, CaseIterable {
     }
 }
 
-// MARK: - Pause State
+// MARK: - Состояние паузы
 
 enum PauseState: Equatable {
     case off
@@ -48,7 +48,7 @@ private struct ShiftTabHorizontalClip: ViewModifier {
     }
 }
 
-// MARK: - Main View
+// MARK: - Главный экран
 
 struct MainView: View {
     @Binding var isShiftOpen: Bool
@@ -105,6 +105,7 @@ struct MainView: View {
                     .opacity(selectedTab == .profile ? 1 : 0)
             }
             .ignoresSafeArea()
+            .animation(nil, value: selectedTab)
 
             VStack {
                 Spacer()
@@ -178,9 +179,7 @@ struct MainView: View {
             return
         }
         haptic.selectionChanged()
-        var t = Transaction(animation: nil)
-        t.disablesAnimations = true
-        withTransaction(t) {
+        withAnimation(.easeInOut(duration: 0.15)) {
             selectedTab = newTab
         }
         if newTab == .orders && hasNewOrders {
@@ -206,7 +205,7 @@ struct MainView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     MainView(isShiftOpen: .constant(false))

@@ -28,7 +28,7 @@ struct PauseScreenView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 16) {
-                    VStack(spacing: 8) {
+                    VStack(spacing: 12) {
                         Text("Пауза на свои дела")
                             .headline2Style()
                             .foregroundStyle(Color.text1)

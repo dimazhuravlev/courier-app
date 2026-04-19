@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Return View
+// MARK: - Возврат в ресторан
 
 struct ReturnView: View {
     let restaurant: Restaurant
@@ -11,7 +11,6 @@ struct ReturnView: View {
             Color.surface0
                 .ignoresSafeArea()
 
-            // Scrollable content: timer banner + restaurant address
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 6) {
                     TimerBanner(
@@ -31,7 +30,6 @@ struct ReturnView: View {
                 .padding(.bottom, 172)
             }
 
-            // Slider button at the bottom
             VStack(spacing: 0) {
                 Spacer()
                 SliderButton(label: "Я вернулся в ресторан", onConfirm: onReturned)
@@ -42,7 +40,7 @@ struct ReturnView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ReturnView(restaurant: .sample) {}

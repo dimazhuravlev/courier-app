@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Font
+// MARK: - Шрифт
 
 extension Font {
     static let display = Font.custom("PPNeueBit-Bold", size: 96)
@@ -10,7 +10,7 @@ extension Font {
     static let caption = Font.custom("Pretendard-SemiBold", size: 12)
 }
 
-// MARK: - View Modifiers
+// MARK: - Модификаторы View
 
 private struct DisplayStyle: ViewModifier {
     func body(content: Content) -> some View {

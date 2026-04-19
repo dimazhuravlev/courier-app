@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Order Stage
+// MARK: - Этап заказа
 
 enum OrderStage: Equatable {
     case waiting
@@ -12,7 +12,7 @@ enum OrderStage: Equatable {
     case returning
 }
 
-// MARK: - Orders View
+// MARK: - Экран заказов
 
 struct OrdersView: View {
     @Binding var suppressMainTabBar: Bool
@@ -190,7 +190,7 @@ struct OrdersView: View {
         isTransitioning = true
 
         Task { @MainActor in
-            // Fade in black overlay — hides current screen completely
+            // Затемнение: текущий экран полностью скрыт
             withAnimation(.easeInOut(duration: 0.25)) {
                 overlayOpacity = 1
             }
@@ -198,7 +198,7 @@ struct OrdersView: View {
             try? await Task.sleep(for: .milliseconds(250))
             try? await Task.sleep(for: .milliseconds(300))
 
-            // Switch stage while hidden behind overlay — no flash possible
+            // Смена этапа под оверлеем — без мигания
             withTransaction(Transaction(animation: nil)) {
                 stage = next
             }
@@ -231,7 +231,7 @@ struct OrdersView: View {
 
             try? await Task.sleep(for: .milliseconds(50))
 
-            // Fade out overlay — reveals new screen
+            // Снятие затемнения — показываем новый экран
             withAnimation(.easeInOut(duration: 0.35)) {
                 overlayOpacity = 0
             }
@@ -241,7 +241,7 @@ struct OrdersView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     MainView(isShiftOpen: .constant(false))

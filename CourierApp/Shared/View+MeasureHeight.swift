@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Preference Key
+// MARK: - PreferenceKey высоты
 
 private struct ContentHeightKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
@@ -10,10 +10,10 @@ private struct ContentHeightKey: PreferenceKey {
     }
 }
 
-// MARK: - View Extension
+// MARK: - Расширение View
 
 extension View {
-    /// Measures the height of the view and writes it into the binding.
+    /// Высота вью пишется в binding.
     func measureHeight(_ height: Binding<CGFloat>) -> some View {
         self.background {
             GeometryReader { geo in
@@ -25,10 +25,10 @@ extension View {
     }
 }
 
-// MARK: - Window Safe Area
+// MARK: - Safe area окна
 
 extension UIApplication {
-    /// Bottom safe area inset of the key window (home indicator area).
+    /// Нижний inset активного окна (зона индикатора «домой»).
     static var safeAreaBottom: CGFloat {
         (shared.connectedScenes.first as? UIWindowScene)?
             .keyWindow?.safeAreaInsets.bottom ?? 0

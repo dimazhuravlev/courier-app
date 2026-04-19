@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Content View
+// MARK: - Корневой экран
 
 struct ContentView: View {
     @State private var isShiftOpen = false
@@ -10,7 +10,7 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ContentView()

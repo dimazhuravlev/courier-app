@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Day Cell
+// MARK: - Ячейка дня
 
 private struct DayCell: View {
     let date: Date
@@ -11,6 +11,16 @@ private struct DayCell: View {
 
     private static let selectionFill = Color.surface3
     private static let selectionStroke = Color.stroke2
+
+    /// Как в месячном календаре: маркер «сегодня» — фиолетовый градиент (не зелёный «есть история»).
+    private static let todayMarkerGradient = LinearGradient(
+        colors: [
+            Color(red: 143 / 255, green: 0, blue: 214 / 255),
+            Color(red: 112 / 255, green: 0, blue: 204 / 255)
+        ],
+        startPoint: UnitPoint(x: 0, y: 0),
+        endPoint: UnitPoint(x: 1, y: 0.405696 / 8.36818)
+    )
 
     private var isPast: Bool {
         date < Calendar.current.startOfDay(for: Date())
@@ -42,7 +52,9 @@ private struct DayCell: View {
 
             ZStack {
                 if isToday {
-                    Circle().fill(Color.success).frame(width: 8, height: 8)
+                    Circle()
+                        .fill(Self.todayMarkerGradient)
+                        .frame(width: 8, height: 8)
                 }
                 if let dotColor {
                     Circle().fill(dotColor).frame(width: 8, height: 8)
@@ -57,9 +69,9 @@ private struct DayCell: View {
     }
 }
 
-// MARK: - Shifts View
+// MARK: - Экран смен
 
-// MARK: - Shift State
+// MARK: - Состояние виджета смены
 
 private enum ShiftWidgetState: Equatable {
     case closed
@@ -91,7 +103,7 @@ struct ShiftsView: View {
     private let bg = Color.surface0
     private let overlayShade = Color(red: 15 / 255, green: 18 / 255, blue: 21 / 255)
 
-    // MARK: - Week Computation
+    // MARK: - Неделя
 
     private var mondayBase: Date {
         let cal = Calendar.current
@@ -127,7 +139,7 @@ struct ShiftsView: View {
         selectedDate > Calendar.current.startOfDay(for: Date())
     }
 
-    // MARK: - Header Strings
+    // MARK: - Строки заголовка
 
     private var headerTitleString: String {
         let cal = Calendar.current
@@ -151,7 +163,7 @@ struct ShiftsView: View {
         return formatter.string(from: selectedDate)
     }
 
-    // MARK: - Body
+    // MARK: - Разметка
 
     var body: some View {
         GeometryReader { geo in
@@ -307,7 +319,7 @@ struct ShiftsView: View {
         }
     }
 
-    // MARK: - Header
+    // MARK: - Заголовок
 
     private var headerView: some View {
         HStack(alignment: .top) {
@@ -347,7 +359,7 @@ struct ShiftsView: View {
         .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 1)
     }
 
-    // MARK: - Week Strip
+    // MARK: - Полоса недели
 
     private var weekdayNamesRow: some View {
         HStack(spacing: 4) {
@@ -444,7 +456,7 @@ struct ShiftsView: View {
         .animation(.easeInOut(duration: 0.15), value: selectedDate)
     }
 
-    // MARK: - Content Area
+    // MARK: - Контент
 
     private var timelineEntries: [ShiftTimelineEntry] {
         if Calendar.current.isDateInToday(selectedDate) {
@@ -520,7 +532,7 @@ struct ShiftsView: View {
         }
     }
 
-    // MARK: - Empty State
+    // MARK: - Пустой день
 
     private var emptyStatePlaceholderText: String {
         if isSelectedDayPast {
@@ -560,9 +572,9 @@ struct ShiftsView: View {
         }
     }
 
-    // MARK: - Bottom Bar
+    // MARK: - Нижняя область
 
-    /// Верхний inset: из `GeometryReader`, иначе из key window (родитель с `ignoresSafeArea()` часто даёт 0 в geo).
+    /// Верхний inset: из GeometryReader, иначе у активного окна (у родителя с ignoresSafeArea() в geo часто 0).
     private func resolvedTopSafeInset(from geo: GeometryProxy) -> CGFloat {
         let fromGeo = geo.safeAreaInsets.top
         if fromGeo > 0.5 { return fromGeo }
@@ -647,7 +659,7 @@ struct ShiftsView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
 
-    // MARK: - Today Floating Button
+    // MARK: - Кнопка «Сегодня»
 
     private var todayFloatingButton: some View {
         VStack {
@@ -691,7 +703,7 @@ struct ShiftsView: View {
             .foregroundStyle(Color.text1)
     }
 
-    // MARK: - Helpers
+    // MARK: - Вспомогательное
 
     private func weekDeltaForDate(_ date: Date) -> Int {
         let cal = Calendar.current
@@ -714,7 +726,7 @@ struct ShiftsView: View {
     }
 }
 
-// MARK: - Open Shift Widget
+// MARK: - Виджет открытой смены
 
 private struct OpenShiftWidget: View {
     let shiftState: ShiftWidgetState
@@ -1008,7 +1020,7 @@ private struct ShiftResumeButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - Start Shift Button Label (волна-градиент как в SliderButton)
+// MARK: - Подпись кнопки «Выйти на смену»
 
 private struct StartShiftButtonLabel: View {
     let text: String
@@ -1040,7 +1052,7 @@ private struct StartShiftButtonLabel: View {
     }
 }
 
-// MARK: - Start Shift Button Style
+// MARK: - Стиль кнопки «Выйти на смену»
 
 private struct StartShiftButtonStyle: ButtonStyle {
     private let gradient = LinearGradient(
@@ -1065,7 +1077,7 @@ private struct StartShiftButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     MainView(isShiftOpen: .constant(false))

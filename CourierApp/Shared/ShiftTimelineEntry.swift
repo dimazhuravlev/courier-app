@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - Timeline Order Status
+// MARK: - Статус заказа в таймлайне
 
 enum TimelineOrderStatus: Codable, Equatable {
     case pending
@@ -8,7 +8,7 @@ enum TimelineOrderStatus: Codable, Equatable {
     case cancelled
 }
 
-// MARK: - Timeline Order
+// MARK: - Заказ в таймлайне
 
 struct TimelineOrder: Codable, Identifiable, Equatable {
     let id: UUID
@@ -30,7 +30,7 @@ struct TimelineOrder: Codable, Identifiable, Equatable {
     }
 }
 
-// MARK: - Shift Timeline Entry
+// MARK: - Запись таймлайна смены
 
 enum ShiftTimelineEntry: Codable, Identifiable, Equatable {
     case shiftOpened(id: UUID, time: Date)

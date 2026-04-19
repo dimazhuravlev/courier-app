@@ -56,7 +56,7 @@
 		B0000000000000000000006A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B0000000000000000000007A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B0000000000000000000008A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B0000000000000000000009A /* CourierApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CourierApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0000000000000000000009A /* Goni.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goni.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0000000000000000000020A /* SliderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderButton.swift; sourceTree = "<group>"; };
 		B0000000000000000000022A /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		B0000000000000000000024A /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 		B0000000000000000000003A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B0000000000000000000009A /* CourierApp.app */,
+				B0000000000000000000009A /* Goni.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -215,9 +215,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B0000000000000000000004A /* CourierApp */ = {
+		B0000000000000000000004A /* Goni */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B0000000000000000000018A /* Build configuration list for PBXNativeTarget "CourierApp" */;
+			buildConfigurationList = B0000000000000000000018A /* Build configuration list for PBXNativeTarget "Goni" */;
 			buildPhases = (
 				B000000000000000000000CA /* Sources */,
 				B000000000000000000000DA /* Resources */,
@@ -230,9 +230,9 @@
 			fileSystemSynchronizedGroups = (
 				FDE0EBD92F6602FA00833BEC /* Fonts */,
 			);
-			name = CourierApp;
-			productName = CourierApp;
-			productReference = B0000000000000000000009A /* CourierApp.app */;
+			name = Goni;
+			productName = Goni;
+			productReference = B0000000000000000000009A /* Goni.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -263,7 +263,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B0000000000000000000004A /* CourierApp */,
+				B0000000000000000000004A /* Goni */,
 			);
 		};
 /* End PBXProject section */
@@ -460,6 +460,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_CFBundleDisplayName = Goni;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -487,6 +488,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_CFBundleDisplayName = Goni;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -512,7 +514,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B0000000000000000000018A /* Build configuration list for PBXNativeTarget "CourierApp" */ = {
+		B0000000000000000000018A /* Build configuration list for PBXNativeTarget "Goni" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B0000000000000000000015A /* Debug */,

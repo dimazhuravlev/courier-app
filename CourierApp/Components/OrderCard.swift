@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Order Card
+// MARK: - Карточка заказа
 
 struct OrderCard: View {
     let number: Int
@@ -11,7 +11,6 @@ struct OrderCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
-                // Order sequence badge
                 ZStack {
                     if isPreparing {
                         WaitingIconView(size: 32)
@@ -26,7 +25,6 @@ struct OrderCard: View {
                 }
                 .frame(width: 32, height: 32)
 
-                // Order info
                 VStack(alignment: .leading, spacing: 2) {
                     Text(orderNumber)
                         .headline1Style()
@@ -40,7 +38,6 @@ struct OrderCard: View {
             }
 
             if isPreparing {
-                // Divider
                 Rectangle()
                     .fill(Color.stroke2)
                     .frame(height: 1)
@@ -60,7 +57,7 @@ struct OrderCard: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ZStack {

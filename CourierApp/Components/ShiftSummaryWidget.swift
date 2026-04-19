@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Summary Data
+// MARK: - Данные саммари
 
 struct ShiftDaySummary {
     let aheadCount: Int
@@ -51,7 +51,7 @@ struct ShiftDaySummary {
     }
 }
 
-// MARK: - Width Preference Key
+// MARK: - PreferenceKey ширины
 
 private struct ContainerWidthKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
@@ -60,7 +60,7 @@ private struct ContainerWidthKey: PreferenceKey {
     }
 }
 
-// MARK: - Summary Widget
+// MARK: - Виджет саммари
 
 struct ShiftSummaryWidget: View {
     let summary: ShiftDaySummary
@@ -74,10 +74,7 @@ struct ShiftSummaryWidget: View {
 
     var body: some View {
         VStack(spacing: gap) {
-            // Top row (65:45 ratio)
             topRow
-
-            // Bottom row (hug + fill)
             bottomRow
         }
         .background(
@@ -88,7 +85,7 @@ struct ShiftSummaryWidget: View {
         .onPreferenceChange(ContainerWidthKey.self) { containerWidth = $0 }
     }
 
-    // MARK: - Top Row
+    // MARK: - Верхний ряд
 
     private var topRow: some View {
         let available = containerWidth - gap
@@ -135,7 +132,7 @@ struct ShiftSummaryWidget: View {
         }
     }
 
-    // MARK: - Bottom Row
+    // MARK: - Нижний ряд
 
     private var bottomRow: some View {
         HStack(spacing: gap) {
@@ -160,7 +157,7 @@ struct ShiftSummaryWidget: View {
         }
     }
 
-    // MARK: - Metric Card
+    // MARK: - Карточка метрики
 
     @ViewBuilder
     private func metricCard<Value: View, Label: View>(
@@ -191,7 +188,7 @@ struct ShiftSummaryWidget: View {
         )
     }
 
-    // MARK: - Formatting
+    // MARK: - Форматирование
 
     private func formatDistance(_ km: Double) -> String {
         if km >= 1 {

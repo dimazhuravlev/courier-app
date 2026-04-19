@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Bottom Tab Bar
+// MARK: - Нижняя панель вкладок
 
 struct TabBar: View {
     @Binding var selectedTab: Tab
@@ -34,7 +34,7 @@ struct TabBar: View {
             if let onTap {
                 onTap(tab)
             } else {
-                withAnimation(.easeInOut(duration: 0.3)) {
+                withAnimation(.easeInOut(duration: 0.15)) {
                     selectedTab = tab
                 }
             }
@@ -49,7 +49,7 @@ struct TabBar: View {
                         ? Color.danger.opacity(blobPulse ? 1 : 0.45)
                         : (isSelected ? Color.text1 : Color.text3)
                 )
-                .animation(.easeInOut(duration: 0.2), value: selectedTab)
+                .animation(.easeInOut(duration: 0.15), value: selectedTab)
                 .animation(.easeOut(duration: 0.3), value: hasNewOrders)
                 .animation(
                     showGlow ? .easeInOut(duration: 1.2).repeatForever(autoreverses: true) : .default,
@@ -88,7 +88,7 @@ struct TabBar: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ZStack(alignment: .bottom) {

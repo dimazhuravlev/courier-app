@@ -1,17 +1,17 @@
 import Foundation
 import SwiftUI
 
-// MARK: - Order History Store
+// MARK: - Хранилище истории заказов
 
 @Observable
 final class OrderHistoryStore {
 
-    // MARK: - State
+    // MARK: - Состояние
 
     private(set) var todayEntries: [ShiftTimelineEntry] = []
     private(set) var datesWithHistory: Set<String> = []
 
-    // MARK: - Private
+    // MARK: - Зависимости и пути
 
     private let fileManager = FileManager.default
     private let encoder: JSONEncoder = {
@@ -30,7 +30,7 @@ final class OrderHistoryStore {
         return docs.appendingPathComponent("order_history", isDirectory: true)
     }
 
-    // MARK: - Init
+    // MARK: - Инициализация
 
     init() {
         ensureDirectoryExists()
@@ -38,7 +38,7 @@ final class OrderHistoryStore {
         todayEntries = loadEntries(for: Date())
     }
 
-    // MARK: - Public API
+    // MARK: - API
 
     func addEntry(_ entry: ShiftTimelineEntry) {
         todayEntries.append(entry)
@@ -81,7 +81,7 @@ final class OrderHistoryStore {
         }
     }
 
-    // MARK: - Private Helpers
+    // MARK: - Вспомогательное
 
     private func ensureDirectoryExists() {
         if !fileManager.fileExists(atPath: historyDirectory.path) {
@@ -113,7 +113,7 @@ final class OrderHistoryStore {
     private func loadDatesWithHistory() {
         guard let files = try? fileManager.contentsOfDirectory(atPath: historyDirectory.path) else { return }
         for file in files where file.hasSuffix(".json") {
-            let key = String(file.dropLast(5)) // remove .json
+            let key = String(file.dropLast(5)) // суффикс .json
             datesWithHistory.insert(key)
         }
     }

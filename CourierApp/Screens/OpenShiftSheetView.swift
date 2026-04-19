@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Courier Type
+// MARK: - Тип курьера
 
 enum CourierType: Int, CaseIterable {
     case walker = 0
@@ -25,14 +25,14 @@ enum CourierType: Int, CaseIterable {
     }
 }
 
-// MARK: - Sheet Step
+// MARK: - Шаг шторки
 
 private enum ShiftStartStep: Equatable {
     case welcome
     case courierType
 }
 
-// MARK: - Open Shift Sheet View
+// MARK: - Шторка «Выйти на смену»
 
 struct OpenShiftSheetView: View {
     @Binding var isPresented: Bool
@@ -85,7 +85,7 @@ struct OpenShiftSheetView: View {
         .animation(.spring(response: 0.45, dampingFraction: 0.82), value: sheetHeight)
     }
 
-    // MARK: - Welcome Step
+    // MARK: - Приветствие
 
     private var welcomeStep: some View {
         VStack(spacing: 32) {
@@ -112,7 +112,7 @@ struct OpenShiftSheetView: View {
         .padding(.bottom, 56)
     }
 
-    // MARK: - Courier Type Step
+    // MARK: - Выбор типа
 
     private var courierTypeStep: some View {
         VStack(spacing: 32) {
@@ -147,7 +147,7 @@ struct OpenShiftSheetView: View {
         .padding(.bottom, 56)
     }
 
-    // MARK: - Courier Type Card
+    // MARK: - Карточка типа
 
     @ViewBuilder
     private func courierTypeCard(_ type: CourierType) -> some View {
@@ -158,11 +158,11 @@ struct OpenShiftSheetView: View {
                 selectedCourierType = type
             }
         } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: 16) {
                 Image(type.imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 56, height: 56)
+                    .frame(width: 64, height: 64)
 
                 Text(type.label)
                     .headline2Style()
@@ -184,14 +184,14 @@ struct OpenShiftSheetView: View {
         .buttonStyle(ShiftSheetButtonStyle())
     }
 
-    // MARK: - Shake
+    // MARK: - Тряска
 
     private func triggerShake() {
         shakeAmount = 0
         withAnimation(.easeOut(duration: 0.5)) {
             shakeAmount = 1
         }
-        // Haptic feedback synchronized with shake peaks
+        // Тактильный отклик по пикам тряски
         let haptic = UIImpactFeedbackGenerator(style: .medium)
         haptic.prepare()
         let peakTimes: [(Double, CGFloat)] = [
@@ -204,7 +204,7 @@ struct OpenShiftSheetView: View {
         }
     }
 
-    // MARK: - Button
+    // MARK: - Кнопка
 
     @ViewBuilder
     private func shiftActionButton(_ title: String, action: @escaping () -> Void) -> some View {
@@ -234,7 +234,7 @@ struct OpenShiftSheetView: View {
         .buttonStyle(ShiftSheetButtonStyle())
     }
 
-    // MARK: - Navigation
+    // MARK: - Переход шага
 
     private func advance(to next: ShiftStartStep) {
         withAnimation(.easeOut(duration: 0.2)) {
@@ -249,7 +249,7 @@ struct OpenShiftSheetView: View {
     }
 }
 
-// MARK: - Button Style
+// MARK: - Стиль кнопки
 
 private struct ShiftSheetButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -262,7 +262,7 @@ private struct ShiftSheetButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - Shake Effect
+// MARK: - Эффект тряски
 
 private struct ShakeEffect: GeometryEffect {
     var animatableData: CGFloat
@@ -275,7 +275,7 @@ private struct ShakeEffect: GeometryEffect {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     Color.surface0

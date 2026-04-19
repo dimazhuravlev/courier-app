@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Release View
+// MARK: - Передача заказа
 
 struct ReleaseView: View {
     let order: Order
@@ -12,7 +12,6 @@ struct ReleaseView: View {
             Color.surface0
                 .ignoresSafeArea()
 
-            // Scrollable content: timer banner + info sections
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 6) {
                     TimerBanner(
@@ -30,7 +29,6 @@ struct ReleaseView: View {
                 .padding(.bottom, 172)
             }
 
-            // Slider button at the bottom
             VStack(spacing: 0) {
                 Spacer()
                 SliderButton(label: order.isPaid ? "Я передал заказ" : "Я получил оплату и передал заказ", onConfirm: onDelivered)
@@ -41,7 +39,7 @@ struct ReleaseView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ReleaseView(order: Order.sampleOrders[0]) {}

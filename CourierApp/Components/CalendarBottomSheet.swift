@@ -38,7 +38,7 @@ struct CalendarBottomSheet: View {
                                     onDateSelected: { date in
                                         let day = cal.startOfDay(for: date)
                                         selectedDate = day
-                                        // Закрываем на следующем цикле run loop, чтобы @State родителя успел обновиться до dismiss.
+                                        // На следующем проходе главной очереди — @State родителя успевает до закрытия шторки.
                                         DispatchQueue.main.async {
                                             isPresented = false
                                         }
@@ -87,7 +87,7 @@ struct CalendarBottomSheet: View {
         .presentationBackground(sheetBg)
     }
 
-    // MARK: - Close Button
+    // MARK: - Закрыть
 
     private var closeButton: some View {
         Button {
@@ -115,7 +115,7 @@ struct CalendarBottomSheet: View {
         .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 1)
     }
 
-    // MARK: - Month Header (sticky)
+    // MARK: - Заголовок месяца (липкий)
 
     private func monthHeader(_ date: Date) -> some View {
         let name: String = {
@@ -145,7 +145,7 @@ struct CalendarBottomSheet: View {
         "\(cal.component(.year, from: date))-\(cal.component(.month, from: date))"
     }
 
-    // MARK: - Today Button
+    // MARK: - Кнопка «Сегодня»
 
     private var todayButton: some View {
         Button {
@@ -182,7 +182,7 @@ struct CalendarBottomSheet: View {
     }
 }
 
-// MARK: - Month Grid
+// MARK: - Сетка месяца
 
 private struct CalendarMonthGrid: View {
     let firstOfMonth: Date
@@ -271,6 +271,9 @@ private struct CalendarMonthGrid: View {
         let isSelected = cal.isDate(date, inSameDayAs: selectedDate)
         let isToday = cal.isDate(date, inSameDayAs: Date())
         let hasHistory = datesWithHistory.contains(dateKey(for: date))
+        let dayStart = cal.startOfDay(for: date)
+        let todayStart = cal.startOfDay(for: Date())
+        let isPast = dayStart < todayStart
         let day = cal.component(.day, from: date)
 
         return Button {
@@ -292,7 +295,22 @@ private struct CalendarMonthGrid: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     .padding(.top, 6)
 
-                if isToday || hasHistory {
+                if isToday {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color(red: 143 / 255, green: 0, blue: 214 / 255),
+                                    Color(red: 112 / 255, green: 0, blue: 204 / 255)
+                                ],
+                                startPoint: UnitPoint(x: 0, y: 0),
+                                endPoint: UnitPoint(x: 1, y: 0.405696 / 8.36818)
+                            )
+                        )
+                        .frame(width: 8, height: 8)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                        .padding(.bottom, 5)
+                } else if hasHistory && isPast {
                     Circle()
                         .fill(Color.success)
                         .frame(width: 8, height: 8)

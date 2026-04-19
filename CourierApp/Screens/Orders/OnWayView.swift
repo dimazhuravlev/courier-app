@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - On Way View
+// MARK: - В пути к клиенту
 
 struct OnWayView: View {
     let order: Order
@@ -13,7 +13,6 @@ struct OnWayView: View {
             Color.surface0
                 .ignoresSafeArea()
 
-            // Scrollable content: timer banner + info sections
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 6) {
                     TimerBanner(
@@ -31,7 +30,6 @@ struct OnWayView: View {
                 .padding(.bottom, 172)
             }
 
-            // Slider button at the bottom
             VStack(spacing: 0) {
                 Spacer()
                 SliderButton(label: "Я около дома клиента", onConfirm: onArrived)
@@ -42,7 +40,7 @@ struct OnWayView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     OnWayView(order: Order.sampleOrders[0]) {}

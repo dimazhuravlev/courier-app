@@ -1,9 +1,8 @@
 import SwiftUI
 
-// MARK: - Waiting Icon View
+// MARK: - Иконка ожидания
 
-/// Animated waiting icon with 12 radial dots.
-/// One dot at a time hides, then the next one clockwise — like a clock hand.
+/// 12 точек по кругу; по очереди гаснут по часовой стрелке.
 struct WaitingIconView: View {
     let size: CGFloat
     @State private var hiddenIndex = 0
@@ -43,7 +42,7 @@ struct WaitingIconView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ZStack {

@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Order Section
+// MARK: - Секция заказа
 
 struct OrderSectionView: View {
     let order: Order
@@ -19,7 +19,7 @@ struct OrderSectionView: View {
         .overlay(RoundedRectangle(cornerRadius: 24).stroke(Color.stroke2, lineWidth: 1))
     }
 
-    // MARK: - Header Row
+    // MARK: - Верхняя строка
 
     private var headerRow: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -43,7 +43,7 @@ struct OrderSectionView: View {
         }
     }
 
-    // MARK: - Details Button
+    // MARK: - Детали
 
     private var detailsButton: some View {
         Text("Детали заказа")
@@ -67,7 +67,7 @@ struct OrderSectionView: View {
             .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 1)
     }
 
-    // MARK: - Divider
+    // MARK: - Разделитель
 
     private var divider: some View {
         Rectangle()
@@ -75,7 +75,7 @@ struct OrderSectionView: View {
             .frame(height: 1)
     }
 
-    // MARK: - Payment Row
+    // MARK: - Оплата
 
     private var paymentRow: some View {
         HStack(alignment: .center, spacing: 0) {
@@ -106,7 +106,7 @@ struct OrderSectionView: View {
                     .foregroundStyle(Color.text1)
 
                 Circle()
-                    .fill(Color.fill6)
+                    .fill(Color.fill4)
                     .frame(width: 4, height: 4)
                 Text(order.paymentType.label)
                     .textStyle()
@@ -116,7 +116,7 @@ struct OrderSectionView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ZStack {

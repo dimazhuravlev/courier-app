@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Preference Key для измерения ширины кнопки
+// MARK: - PreferenceKey ширины кнопки
 
 private struct ButtonWidthKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
@@ -10,14 +10,14 @@ private struct ButtonWidthKey: PreferenceKey {
     }
 }
 
-// MARK: - Gesture Flags
+// MARK: - Флаги жеста
 
 final class GestureFlags {
     var bloopFired = false
     var lastHapticStep: Int = 0
 }
 
-// MARK: - Slider Button
+// MARK: - Слайдер-кнопка
 
 struct SliderButton: View {
     let label: String
@@ -175,18 +175,15 @@ struct SliderButton: View {
         let radius = capsuleHeight / 2
         let iconW: CGFloat = 21
         let iconH: CGFloat = 37
-        // Line width fills the space to the left of the centered icon.
-        // As capsule grows rightward, icon drifts right (center-anchored) and line stretches.
+        // Линия слева от иконки; при росте капсулы вправо тянется линия, иконка смещается.
         let lineW = max(0, (capsuleWidth - iconW) / 2 + 20)
 
         return ZStack {
-            // Horizontal tail — grows from the left as capsule expands
             Rectangle()
                 .fill(Color.fillInverted)
                 .frame(width: lineW, height: 5)
                 .offset(x: -(iconW + lineW) / 2 + 20)
 
-            // Pixel arrowhead, center-anchored so it moves right during slide
             Image("slider arrow")
                 .resizable()
                 .interpolation(.none)
@@ -275,7 +272,6 @@ struct SliderButton: View {
 
     private var buttonGradient: some View {
         ZStack {
-            // Default gradient
             LinearGradient(
                 colors: [
                     Color(red: 143 / 255, green: 0, blue: 214 / 255),
@@ -284,7 +280,6 @@ struct SliderButton: View {
                 startPoint: .leading,
                 endPoint: .trailing
             )
-            // Pressed/active gradient cross-fades in
             LinearGradient(
                 colors: [
                     Color(red: 173 / 255, green: 10 / 255, blue: 1.0),
@@ -298,7 +293,7 @@ struct SliderButton: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ZStack {

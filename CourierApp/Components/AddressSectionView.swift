@@ -1,6 +1,7 @@
 import SwiftUI
+import UIKit
 
-// MARK: - Address Section
+// MARK: - Секция адреса
 
 struct AddressSectionView: View {
     let title: String
@@ -9,6 +10,8 @@ struct AddressSectionView: View {
     var blurDetails: Bool = true
     var onCopy: ((String) -> Void)? = nil
     var onBlurredTap: (() -> Void)? = nil
+
+    @State private var navigatorIconPressed = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -25,7 +28,7 @@ struct AddressSectionView: View {
         .overlay(RoundedRectangle(cornerRadius: 24).stroke(Color.stroke2, lineWidth: 1))
     }
 
-    // MARK: - Header Row
+    // MARK: - Верхняя строка
 
     private var headerRow: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -45,17 +48,54 @@ struct AddressSectionView: View {
         }
     }
 
-    // MARK: - Navigation Button
+    // MARK: - Кнопка навигации
 
     private var navigationButton: some View {
-        Image("navigation button")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(width: 64, height: 64)
-            .clipped()
+        Button {
+            openYandexNavigator(for: address)
+        } label: {
+            Image("navigation button")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 64, height: 64)
+                .clipped()
+                .scaleEffect(navigatorIconPressed ? 0.96 : 1.0)
+                .animation(.easeInOut(duration: 0.1), value: navigatorIconPressed)
+        }
+        .buttonStyle(.plain)
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    if !navigatorIconPressed {
+                        navigatorIconPressed = true
+                        let haptic = UIImpactFeedbackGenerator(style: .medium)
+                        haptic.prepare()
+                        haptic.impactOccurred()
+                    }
+                }
+                .onEnded { _ in
+                    navigatorIconPressed = false
+                }
+        )
+        .accessibilityLabel("Открыть в Яндекс Навигаторе")
     }
 
-    // MARK: - Divider
+    private func openYandexNavigator(for address: DeliveryAddress) {
+        guard let url = yandexNavigatorMapSearchURL(for: address) else { return }
+        UIApplication.shared.open(url, options: [:]) { success in
+            if !success, let storeURL = URL(string: "https://apps.apple.com/app/id474500851") {
+                UIApplication.shared.open(storeURL, options: [:], completionHandler: nil)
+            }
+        }
+    }
+
+    private func yandexNavigatorMapSearchURL(for address: DeliveryAddress) -> URL? {
+        var components = URLComponents(string: "yandexnavi://map_search")
+        components?.queryItems = [URLQueryItem(name: "text", value: address.navigationSearchQuery)]
+        return components?.url
+    }
+
+    // MARK: - Разделитель
 
     private var divider: some View {
         Rectangle()
@@ -63,7 +103,7 @@ struct AddressSectionView: View {
             .frame(height: 1)
     }
 
-    // MARK: - Details Row
+    // MARK: - Детали
 
     private var detailsRow: some View {
         HStack(alignment: .center, spacing: 0) {
@@ -100,7 +140,7 @@ struct AddressSectionView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ZStack {

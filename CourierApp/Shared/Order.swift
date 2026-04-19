@@ -1,16 +1,26 @@
 import Foundation
 
-// MARK: - Delivery Address
+// MARK: - Адрес доставки
 
 struct DeliveryAddress {
+    let city: String
     let street: String
     let entrance: String
     let intercom: String
     let floor: String
     let apartment: String
+
+    /// Город + улица для внешних карт и навигатора.
+    var navigationSearchQuery: String {
+        let c = city.trimmingCharacters(in: .whitespacesAndNewlines)
+        let s = street.trimmingCharacters(in: .whitespacesAndNewlines)
+        if c.isEmpty { return s }
+        if s.isEmpty { return c }
+        return "\(c), \(s)"
+    }
 }
 
-// MARK: - Delivery Result
+// MARK: - Результат доставки
 
 enum DeliveryStatus {
     case ahead
@@ -25,7 +35,7 @@ struct DeliveryResult {
     let distance: String
 }
 
-// MARK: - Payment Type
+// MARK: - Оплата
 
 enum PaymentType {
     case cash
@@ -39,7 +49,7 @@ enum PaymentType {
     }
 }
 
-// MARK: - Order
+// MARK: - Заказ
 
 struct Order: Identifiable {
     let id: UUID
@@ -54,7 +64,7 @@ struct Order: Identifiable {
     let deliveryResult: DeliveryResult
 }
 
-// MARK: - Restaurant
+// MARK: - Ресторан
 
 struct Restaurant {
     let name: String
@@ -65,6 +75,7 @@ extension Restaurant {
     static let sample = Restaurant(
         name: "Ресторан",
         address: DeliveryAddress(
+            city: "Москва",
             street: "ул. Тверская, 12",
             entrance: "",
             intercom: "",
@@ -74,7 +85,7 @@ extension Restaurant {
     )
 }
 
-// MARK: - Sample Data
+// MARK: - Тестовые данные
 
 extension Order {
     static let sampleOrders: [Order] = [
@@ -83,6 +94,7 @@ extension Order {
             sequenceNumber: 1,
             number: "35012",
             address: DeliveryAddress(
+                city: "Москва",
                 street: "пер. Покровский, 18",
                 entrance: "2",
                 intercom: "2801#",
@@ -106,6 +118,7 @@ extension Order {
             sequenceNumber: 2,
             number: "35013",
             address: DeliveryAddress(
+                city: "Москва",
                 street: "ул. Ярославская, 21",
                 entrance: "1",
                 intercom: "45Б",
@@ -129,6 +142,7 @@ extension Order {
             sequenceNumber: 3,
             number: "35014",
             address: DeliveryAddress(
+                city: "Москва",
                 street: "ул. Большая Дмитровка, 7",
                 entrance: "3",
                 intercom: "107#",

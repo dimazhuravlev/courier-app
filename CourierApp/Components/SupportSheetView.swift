@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Support Sheet
+// MARK: - Шторка поддержки
 
 struct SupportSheetView: View {
     @State private var contentHeight: CGFloat = 0
@@ -106,7 +106,7 @@ struct SupportSheetView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     Color.surface0

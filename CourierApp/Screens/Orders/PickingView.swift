@@ -1,12 +1,12 @@
 import SwiftUI
 
-// MARK: - Picking View
+// MARK: - Сбор заказов
 
 struct PickingView: View {
     let orders: [Order]
     let onPickedUp: () -> Void
 
-    /// Tracks which orders are still preparing (by order ID).
+    /// Какие заказы ещё готовятся (по id).
     @State private var preparingOrderIDs: Set<UUID> = []
     @State private var readyTimer: Timer?
 
@@ -15,10 +15,8 @@ struct PickingView: View {
             Color.surface0
                 .ignoresSafeArea()
 
-            // Timer banner and order cards
             VStack(spacing: 0) {
                 if hasPreparing {
-                    // Title card when some orders are still preparing
                     VStack {
                         Text("Подождите, пока все\nзаказы будут готовы")
                             .headline1Style()
@@ -58,7 +56,6 @@ struct PickingView: View {
             }
             .padding(.top, 72)
 
-            // Slider button at the bottom
             VStack(spacing: 0) {
                 Spacer()
                 SliderButton(label: "Я забрал все заказы", onConfirm: onPickedUp)
@@ -75,11 +72,10 @@ struct PickingView: View {
     }
 
     private func setupPreparingState() {
-        // Order 35014 (3rd order) starts as preparing
+        // Демо: заказ 35014 сначала «готовится»
         if let order = orders.first(where: { $0.number == "35014" }) {
             preparingOrderIDs.insert(order.id)
 
-            // After 15 seconds, transition to ready
             readyTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: false) { _ in
                 withAnimation(.easeInOut(duration: 0.35)) {
                     _ = preparingOrderIDs.remove(order.id)
@@ -89,7 +85,7 @@ struct PickingView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     PickingView(orders: Order.sampleOrders) {}

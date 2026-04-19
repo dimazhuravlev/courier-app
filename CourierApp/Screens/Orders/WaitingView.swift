@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Waiting View
+// MARK: - Ожидание заказов
 
 struct WaitingView: View {
     let onAssigned: () -> Void
@@ -32,7 +32,7 @@ struct WaitingView: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     WaitingView {}

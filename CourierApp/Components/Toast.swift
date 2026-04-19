@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Toast View
+// MARK: - Тост
 
 private struct ToastView: View {
     let text: String
@@ -84,7 +84,7 @@ private struct ToastView: View {
     }
 }
 
-// MARK: - Toast Modifier
+// MARK: - Модификатор тоста
 
 private struct ToastModifier: ViewModifier {
     let text: String
@@ -99,7 +99,7 @@ private struct ToastModifier: ViewModifier {
     }
 }
 
-// MARK: - View Extension
+// MARK: - Расширение View
 
 extension View {
     func toast(_ text: String, isPresented: Binding<Bool>) -> some View {

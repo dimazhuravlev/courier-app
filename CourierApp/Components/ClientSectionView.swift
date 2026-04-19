@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Client Section
+// MARK: - Секция клиента
 
 struct ClientSectionView: View {
     let order: Order
@@ -21,7 +21,7 @@ struct ClientSectionView: View {
         .overlay(RoundedRectangle(cornerRadius: 24).stroke(Color.stroke2, lineWidth: 1))
     }
 
-    // MARK: - Header Row
+    // MARK: - Верхняя строка
 
     private var headerRow: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -45,7 +45,7 @@ struct ClientSectionView: View {
         }
     }
 
-    // MARK: - Call Button
+    // MARK: - Звонок
 
     private var callButton: some View {
         HStack(spacing: 6) {
@@ -74,7 +74,7 @@ struct ClientSectionView: View {
         .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 1)
     }
 
-    // MARK: - Comment Bubble
+    // MARK: - Комментарий
 
     @ViewBuilder
     private func commentBubble(text: String) -> some View {
@@ -102,7 +102,7 @@ struct ClientSectionView: View {
 }
 
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ZStack {

@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Success Screen Configuration
+// MARK: - Конфигурация экрана успеха
 
 struct SuccessConfig {
     let gradientStops: [Gradient.Stop]
@@ -17,7 +17,7 @@ struct SuccessConfig {
         self.stat3Sequence = Self.distanceSequence(from: deliveryResult.distance)
     }
 
-    // MARK: - Gradient
+    // MARK: - Градиент
 
     private static func gradientStops(for status: DeliveryStatus) -> [Gradient.Stop] {
         switch status {
@@ -42,7 +42,7 @@ struct SuccessConfig {
         }
     }
 
-    // MARK: - Sequence Generators
+    // MARK: - Последовательности для анимации цифр
 
     private static func timeSequence(from value: String) -> [String] {
         let prefix: String
@@ -94,7 +94,7 @@ struct SuccessConfig {
     }
 }
 
-// MARK: - Success View
+// MARK: - Экран успеха
 
 struct SuccessView: View {
     var ordersDelivered: Int = 1
@@ -120,7 +120,7 @@ struct SuccessView: View {
     private let timerDuration: Double = 7.0
     private let statColor = Color.surface0
 
-    // MARK: - Body
+    // MARK: - Разметка
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -155,7 +155,7 @@ struct SuccessView: View {
         .task { await runAnimations() }
     }
 
-    // MARK: - Illustrations
+    // MARK: - Иконки заказов
 
     private var illustrationsBlock: some View {
         VStack(spacing: 12) {
@@ -177,15 +177,15 @@ struct SuccessView: View {
 
     private func opacityForPackage(at index: Int) -> Double {
         if index < ordersDelivered - 1 {
-            return 0.3 // already delivered earlier
+            return 0.3
         } else if index == ordersDelivered - 1 {
-            return currentPackageOpacity // current — blinks
+            return currentPackageOpacity
         } else {
-            return 1.0 // not yet delivered
+            return 1.0
         }
     }
 
-    // MARK: - Stat Item
+    // MARK: - Показатель
 
     private func statItem(value: String, label: String, visible: Bool, strokeProgress: CGFloat) -> some View {
         let strokeColor = statColor.opacity(strokeProgress)
@@ -210,7 +210,7 @@ struct SuccessView: View {
         .animation(.easeOut(duration: 0.4), value: visible)
     }
 
-    // MARK: - Timer Button
+    // MARK: - Кнопка с таймером
 
     private var timerButton: some View {
         Button(action: navigate) {
@@ -233,14 +233,14 @@ struct SuccessView: View {
         .buttonStyle(ScaleHapticButtonStyle())
     }
 
-    // MARK: - Animations
+    // MARK: - Анимации
 
     @MainActor
     private func runAnimations() async {
         try? await Task.sleep(for: .milliseconds(50))
         timerProgress = 0
 
-        // Blink delivered packages: sharp toggle between 1.0 and 0.3
+        // Мигание иконки текущего заказа (1.0 ↔ 0.3)
         Task { @MainActor in
             let step: Double = 0.3
             let blinks: [Double] = [0.3, 1.0, 0.3, 1.0, 0.3, 1.0, 0.3, 1.0, 0.3]
@@ -293,7 +293,7 @@ struct SuccessView: View {
     }
 }
 
-// MARK: - Scale Haptic Button Style
+// MARK: - Кнопка с хаптиком и масштабом
 
 private struct ScaleHapticButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -306,7 +306,7 @@ private struct ScaleHapticButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     SuccessView(

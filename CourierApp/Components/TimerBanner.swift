@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Timer Status
+// MARK: - Состояние таймера
 
 enum TimerStatus: Equatable {
     case normal
@@ -8,7 +8,7 @@ enum TimerStatus: Equatable {
     case late
 }
 
-// MARK: - Timer Banner
+// MARK: - Баннер таймера
 
 struct TimerBanner: View {
     let title: String
@@ -18,16 +18,15 @@ struct TimerBanner: View {
 
     @Environment(DeliveryTimerStore.self) private var timerStore
 
-    // Unique per view instance: preserved across tab switches (same view stays alive),
-    // but regenerated when the order stage changes (SwiftUI creates a new TimerBanner).
+    // Свой UUID на экземпляр; при смене этапа заказа вью пересоздаётся — новый ключ таймера.
     @State private var instanceID = UUID()
     @State private var lastReported: TimerStatus = .normal
 
-    // MARK: Computed
+    // MARK: Вычисляемое
 
     private var key: String { instanceID.uuidString }
 
-    /// Accessing ticks inside body registers this view as an observer in @Observable tracking.
+    /// Чтение ticks в body подписывает вью на @Observable.
     private var elapsed: Int {
         let _ = timerStore.ticks[key, default: 0]
         return timerStore.elapsed(for: key)
@@ -41,7 +40,7 @@ struct TimerBanner: View {
         return Double(remaining) / Double(totalSeconds)
     }
 
-    /// Share of total width for the active (green/yellow) timeline fill — shrinks from the right as time runs out.
+    /// Доля ширины зелёной/жёлтой заливки; убывает справа по мере истечения времени.
     private var remainingWidthFraction: CGFloat {
         guard totalSeconds > 0, status != .late else { return 0 }
         return CGFloat(Double(remaining) / Double(totalSeconds))
@@ -52,8 +51,7 @@ struct TimerBanner: View {
         return progress <= 0.10 ? .warning : .normal
     }
 
-    // 0 = full green, 1 = full orange.
-    // Transition window: 25% → 10% remaining.
+    // 0 — зелёный, 1 — оранжевый; переход между 25% и 10% оставшегося времени.
     private var fillBlend: Double {
         guard status != .late, totalSeconds > 0 else { return 1 }
         return max(0, min(1, (0.25 - progress) / 0.15))
@@ -69,11 +67,10 @@ struct TimerBanner: View {
         "\(seconds / 60):\(String(format: "%02d", seconds % 60))"
     }
 
-    // MARK: Subviews
+    // MARK: Подвью
 
     private var ambientGlow: some View {
         ZStack {
-            // Green glow (normal)
             Ellipse()
                 .fill(
                     LinearGradient(
@@ -87,7 +84,6 @@ struct TimerBanner: View {
                 )
                 .opacity(status != .late ? 1 - fillBlend : 0)
 
-            // Yellow-orange glow (warning) — fades in via fillBlend, matching the fill
             Ellipse()
                 .fill(
                     LinearGradient(
@@ -101,7 +97,6 @@ struct TimerBanner: View {
                 )
                 .opacity(status != .late ? fillBlend : 0)
 
-            // Red glow (late)
             Ellipse()
                 .fill(
                     EllipticalGradient(
@@ -120,13 +115,12 @@ struct TimerBanner: View {
         .animation(.linear(duration: 0.95), value: fillBlend)
     }
 
-    // MARK: Body
+    // MARK: Разметка
 
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
 
-                // Text on top of fill
                 VStack(alignment: .leading, spacing: 0) {
                     Text(title)
                         .headline1Style()
@@ -142,12 +136,10 @@ struct TimerBanner: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
                 ZStack(alignment: .leading) {
-                    // Track — same translucent gray as section cards (e.g. AddressSectionView)
                     Color.surface3
 
                     if status != .late {
                         ZStack {
-                            // Green (normal)
                             LinearGradient(
                                 stops: [
                                     Gradient.Stop(color: Color(red: 0.4, green: 0.76, blue: 0.04), location: 0),
@@ -157,7 +149,6 @@ struct TimerBanner: View {
                                 endPoint: UnitPoint(x: 1, y: 0.5)
                             )
 
-                            // Yellow (warning) — fades in via fillBlend
                             LinearGradient(
                                 stops: [
                                     Gradient.Stop(color: Color(red: 0.95, green: 0.52, blue: 0), location: 0),
@@ -171,7 +162,6 @@ struct TimerBanner: View {
                         .frame(width: max(0, geo.size.width * remainingWidthFraction))
                         .clipped()
                     } else {
-                        // Red (late) — full width once time is up
                         LinearGradient(
                             stops: [
                                 Gradient.Stop(color: Color(red: 0.59, green: 0.07, blue: 0.19), location: 0),
@@ -212,7 +202,7 @@ struct TimerBanner: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Превью
 
 #Preview {
     ZStack {

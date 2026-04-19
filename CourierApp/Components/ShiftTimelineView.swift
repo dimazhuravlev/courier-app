@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Shift Timeline View
+// MARK: - Таймлайн смены
 
 struct ShiftTimelineView: View {
     let entries: [ShiftTimelineEntry]
@@ -52,7 +52,7 @@ struct ShiftTimelineView: View {
     }
 }
 
-// MARK: - Timeline Divider View
+// MARK: - Разделитель таймлайна
 
 private struct TimelineDividerView: View {
     let time: Date
@@ -77,7 +77,7 @@ private struct TimelineDividerView: View {
     }
 }
 
-// MARK: - Timeline Event Card
+// MARK: - Карточка события
 
 private struct TimelineEventCard: View {
     let title: String
@@ -95,7 +95,7 @@ private struct TimelineEventCard: View {
     }
 }
 
-// MARK: - Timeline Order Card
+// MARK: - Карточка заказа в таймлайне
 
 private struct TimelineOrderCard: View {
     let order: TimelineOrder
@@ -134,7 +134,7 @@ private struct TimelineOrderCard: View {
     }
 }
 
-// MARK: - Order Status Label
+// MARK: - Статус заказа
 
 private struct OrderStatusLabel: View {
     let status: TimelineOrderStatus
@@ -191,7 +191,7 @@ private struct OrderStatusLabel: View {
     }
 }
 
-// MARK: - Route Connector
+// MARK: - Связка маршрута
 
 private struct RouteConnector: View {
     var body: some View {

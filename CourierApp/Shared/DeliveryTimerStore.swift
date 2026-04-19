@@ -1,27 +1,26 @@
 import Foundation
 import Observation
 
-// MARK: - Delivery Timer Store
+// MARK: - Таймеры доставки
 
-/// Lives at the app level and keeps timers running regardless of view lifecycle.
-/// Each timer is identified by a string key. Calling register(key:) is idempotent —
-/// the start date and background Task are created once and survive tab switches.
+/// На уровне приложения; тики не зависят от жизненного цикла экранов.
+/// Ключ — строка; повторный register для того же ключа не перезапускает таймер.
 @Observable
 final class DeliveryTimerStore {
 
-    // Observed: views that read ticks[key] re-render every second.
+    // Подписка @Observable: чтение ticks[key] даёт обновление раз в секунду.
     var ticks: [String: Int] = [:]
 
-    // Not observed: reading startDates doesn't subscribe the view to future changes.
+    // Чтение startDates не подписывает вью на обновления.
     @ObservationIgnored
     private var startDates: [String: Date] = [:]
 
     @ObservationIgnored
     private var tasks: [String: Task<Void, Never>] = [:]
 
-    // MARK: Public API
+    // MARK: API
 
-    /// Registers a timer for `key` if not already running. Safe to call multiple times.
+    /// Регистрирует таймер по ключу, если ещё не запущен.
     func register(key: String) {
         if startDates[key] == nil {
             startDates[key] = Date()
@@ -35,13 +34,13 @@ final class DeliveryTimerStore {
         }
     }
 
-    /// Restarts the timer for `key` from zero.
+    /// Сброс таймера по ключу.
     func reset(key: String) {
         startDates[key] = Date()
         ticks[key] = 0
     }
 
-    /// Wall-clock seconds elapsed since the timer for `key` was registered.
+    /// Секунд с момента регистрации таймера.
     func elapsed(for key: String) -> Int {
         guard let date = startDates[key] else { return 0 }
         return max(0, Int(Date().timeIntervalSince(date)))
